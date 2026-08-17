@@ -1,0 +1,74 @@
+equipment_type: Motor
+max_score: 100
+pass_threshold: 70
+items:
+  # Verified against the source Excel (data/사내 노후판단 기준 2.xlsx, Motor sheet):
+  # 배점 15 is declared but no option reaches it (highest is 생산품질 직결설비 = 10).
+  # Confirmed intentional/pre-existing in the source data, not a transcription bug.
+  - key: importance
+    label: 설비중요도
+    max_points: 15
+    rule: categorical
+    options:
+      - {value: standby_yes, label: "Stand by 유", points: 0}
+      - {value: standby_no, label: "Stand by 무", points: 5}
+      - {value: quality_critical, label: "생산품질 직결설비", points: 10}
+
+  - key: repair_history
+    label: 수리실적
+    max_points: 30
+    rule: repair_history
+
+  - key: lifespan
+    label: 수명
+    max_points: 20
+    rule: linear_capped
+    points_per_year: 1
+
+  - key: start_frequency
+    label: 기동횟수
+    max_points: 5
+    rule: categorical
+    options:
+      - {value: continuous, label: "연속", points: 0}
+      - {value: intermittent, label: "간헐기동(5회 미만/일)", points: 3}
+      - {value: frequent, label: "빈번기동(5회 이상/일)", points: 5}
+
+  - key: start_method
+    label: 기동방법
+    max_points: 5
+    rule: categorical
+    options:
+      - {value: direct, label: "직입기동", points: 5}
+      - {value: reactor, label: "Reactor기동", points: 3}
+      - {value: scm, label: "SCM기동", points: 0}
+
+  - key: install_environment
+    label: 설치환경
+    max_points: 10
+    rule: sum_subfactors
+    sub_factors:
+      - {key: enclosure_corrosion, label: "외함부식", points: 2}
+      - {key: dust, label: "분진", points: 2}
+      - {key: gas, label: "GAS", points: 2}
+      - {key: ventilation, label: "통풍유무", points: 2}
+      - {key: vibration, label: "진동(2.8mm/s 초과)", points: 2}
+
+  - key: insulation_resistance
+    label: 절연저항
+    max_points: 10
+    rule: categorical
+    options:
+      - {value: low_voltage_ge_1m, label: "저압 1MΩ 이상", points: 0}
+      - {value: low_voltage_lt_1m, label: "저압 1MΩ 미만", points: 10}
+      - {value: high_voltage_ge_5m, label: "고압 5MΩ 이상", points: 0}
+      - {value: high_voltage_lt_5m, label: "고압 5MΩ 미만", points: 10}
+
+  - key: operating_condition
+    label: 운전조건
+    max_points: 5
+    rule: categorical
+    options:
+      - {value: constant_load, label: "일정부하", points: 0}
+      - {value: variable_load, label: "가변부하", points: 5}
+

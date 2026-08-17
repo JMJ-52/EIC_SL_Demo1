@@ -1,0 +1,54 @@
+equipment_type: Drive
+max_score: 100
+pass_threshold: 70
+items:
+  - key: operating_hours
+    label: 가동기간
+    max_points: 20
+    rule: operating_hours
+
+  - key: spare_parts
+    label: 예비품
+    max_points: 30
+    rule: spare_parts_ratio
+
+  - key: failure_count
+    label: 고장건수
+    max_points: 20
+    rule: failure_count
+    bonus_cap: 5
+
+  - key: discontinuation
+    label: 단종여부
+    max_points: 10
+    rule: categorical
+    # 공급사/모델명으로 단종 DB를 조회해 결정되는 값이라, 화면에서는 기본으로
+    # 잠가두고 "(수동입력)"을 체크했을 때만 직접 고를 수 있게 한다.
+    auto_determined: true
+    options:
+      - {value: not_purchasable, label: "구매불", points: 10}
+      - {value: purchasable, label: "구매가", points: 5}
+      - {value: not_discontinued, label: "미단종", points: 0}
+
+  - key: card_repairability
+    label: 카드수리가능여부
+    max_points: 10
+    rule: categorical
+    options:
+      - {value: not_repairable, label: "불가", points: 10}
+      - {value: overseas_repair, label: "해외수리", points: 5}
+      - {value: domestic_repair, label: "국내수리", points: 0}
+
+  - key: visual_inspection
+    label: 외관검사
+    max_points: 5
+    rule: direct_score
+
+  - key: cross_plant_compatibility
+    label: 타공장호환여부
+    max_points: 5
+    rule: categorical
+    options:
+      - {value: incompatible, label: "미호환", points: 5}
+      - {value: compatible, label: "호환", points: 0}
+

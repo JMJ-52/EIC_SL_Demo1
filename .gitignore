@@ -1,0 +1,14 @@
+.streamlit/secrets.toml
+.env
+.DS_Store
+.pytest_cache/
+__pycache__/
+*.py[cod]
+
+# Session-only upload scratch files
+tmp_uploads/
+uploads/
+.eic-sl-demo/
+
+# Task reports and local SDD scratch notes
+.sdd/
